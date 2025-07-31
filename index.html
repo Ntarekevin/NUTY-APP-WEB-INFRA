@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoalEats - Nutrition Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 GoalEats</h1>
+            <p>Your Personalized Nutrition Calculator</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-text">
+                <span id="progressText">Step 1 of 4</span>
+                <span id="progressPercent">25% Complete</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Personal Information -->
+        <div class="step" id="step1">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Personal Information</h2>
+                    <p>Tell us about yourself to create your personalized nutrition plan</p>
+                </div>
+                <div class="card-content">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="currentWeight">Current Weight (kg)</label>
+                            <input type="number" id="currentWeight" placeholder="70">
+                        </div>
+                        <div class="form-group">
+                            <label for="height">Height (cm)</label>
+                            <input type="number" id="height" placeholder="175">
+                        </div>
+                        <div class="form-group">
+                            <label for="goalWeight">Goal Weight (kg)</label>
+                            <input type="number" id="goalWeight" placeholder="75">
+                        </div>
+                        <div class="form-group">
+                            <label for="goalBodyFat">Goal Body Fat (%)</label>
+                            <input type="number" id="goalBodyFat" placeholder="15">
+                        </div>
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" placeholder="25">
+                        </div>
+                        <div class="form-group">
+                            <label for="gender">Gender</label>
+                            <select id="gender">
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="activityLevel">Activity Level</label>
+                        <select id="activityLevel">
+                            <option value="">Select activity level</option>
+                            <option value="sedentary">Sedentary (little/no exercise)</option>
+                            <option value="light">Light (light exercise 1-3 days/week)</option>
+                            <option value="moderate">Moderate (moderate exercise 3-5 days/week)</option>
+                            <option value="active">Active (hard exercise 6-7 days/week)</option>
+                            <option value="very-active">Very Active (very hard exercise/physical job)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="nextStep(2)">Next Step</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Goal Selection -->
+        <div class="step hidden" id="step2">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🎯 Choose Your Goal</h2>
+                    <p>Are you looking to bulk up or cut down?</p>
+                </div>
+                <div class="card-content">
+                    <div class="radio-grid">
+                        <div class="radio-option" onclick="selectGoal('bulk')">
+                            <input type="radio" id="bulk" name="goal" value="bulk">
+                            <label for="bulk">
+                                <div class="option-title">Bulk</div>
+                                <div class="option-desc">Gain muscle mass and increase weight</div>
+                            </label>
+                        </div>
+                        <div class="radio-option" onclick="selectGoal('cut')">
+                            <input type="radio" id="cut" name="goal" value="cut">
+                            <label for="cut">
+                                <div class="option-title">Cut</div>
+                                <div class="option-desc">Lose fat and decrease weight</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-outline" onclick="prevStep(1)">Previous</button>
+                        <button class="btn btn-primary" onclick="nextStep(3)">Next Step</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Food Preference -->
+        <div class="step hidden" id="step3">
+            <div class="card">
+                <div class="card-header">
+                    <h2>🍽️ Food Preference</h2>
+                    <p>Do you prefer solid food or liquid nutrition?</p>
+                </div>
+                <div class="card-content">
+                    <div class="radio-grid">
+                        <div class="radio-option" onclick="selectPreference('food')">
+                            <input type="radio" id="food" name="preference" value="food">
+                            <label for="food">
+                                <div class="option-title">🍽️ Solid Food</div>
+                                <div class="option-desc">Traditional meals with whole foods</div>
+                            </label>
+                        </div>
+                        <div class="radio-option" onclick="selectPreference('drinks')">
+                            <input type="radio" id="drinks" name="preference" value="drinks">
+                            <label for="drinks">
+                                <div class="option-title">🥤 Liquid Nutrition</div>
+                                <div class="option-desc">Smoothies, shakes, and liquid meals</div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-outline" onclick="prevStep(2)">Previous</button>
+                        <button class="btn btn-primary" onclick="generatePlan()">Generate Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Results -->
+        <div class="step hidden" id="step4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>📋 Your Nutrition Plan</h2>
+                    <p id="planDescription">Your personalized nutrition plan</p>
+                </div>
+                <div class="card-content">
+                    <div class="macro-grid" id="macroResults">
+                        <!-- Macro results will be populated here -->
+                    </div>
+                    
+                    <div class="badges">
+                        <span class="badge" id="goalBadge"></span>
+                        <span class="badge badge-outline" id="preferenceBadge"></span>
+                    </div>
+
+                    <div class="tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" onclick="showTab('weekly')">Weekly Plan</button>
+                            <button class="tab-btn" onclick="showTab('monthly')">Monthly Overview</button>
+                        </div>
+                        
+                        <div class="tab-content" id="weeklyTab">
+                            <div class="plan-section">
+                                <h3>This Week's Meal Plan</h3>
+                                <div id="weeklyPlan"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content hidden" id="monthlyTab">
+                            <div class="plan-section">
+                                <h3>Monthly Overview</h3>
+                                <div id="monthlyPlan"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="food-analysis">
+                        <h3>🔍 Food Analysis</h3>
+                        <p>Analyze your food with AI to track nutrition automatically</p>
+                        <button class="btn btn-secondary" onclick="analyzeFoodImage()">Analyze Sample Food Image</button>
+                        <p class="note">In a full app, you would upload your own food images for analysis.</p>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn btn-outline" onclick="downloadPlan('weekly')">📥 Download Weekly</button>
+                        <button class="btn btn-outline" onclick="downloadPlan('monthly')">📥 Download Monthly</button>
+                        <button class="btn btn-outline" onclick="startOver()">🔄 Start Over</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toast" class="toast hidden">
+            <div class="toast-content">
+                <span id="toastMessage"></span>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
