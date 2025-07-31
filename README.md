@@ -10,8 +10,8 @@ Docker Hub Repository:
   - `v1` –  as initial production release
  Build Instructions
 
-To build the Docker image locally from your project directory (where your `dockerfile`, `index.html`, `style.css`, and `script.js` are located):
-```bash
+To build the Docker image locally from your project directory (where your `dockerfile`, `index.html`, `style.css`, and `script.js` are located): '''bash
+
 docker build -t kevin368/nuty:v1 .
 
 
